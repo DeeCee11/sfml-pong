@@ -2,15 +2,25 @@
 
 int main()
 {
+	// TODO: move constants into own file?
+	// Window resolution - 512x480 like Namco System 11/12!
 	const int WINDOW_WIDTH = 512;
 	const int WINDOW_HEIGHT = 480;
+
+	// Environment constants
 	const float WALL_THICKNESS = 10;
 	const float DIVIDER_THICKNESS = 3;
+
+	// Paddle size + positioning
+	const float PADDLE_SPEED = 0.1;
 	const float PADDLE_THICKNESS = 10;
 	const float PADDLE_LENGTH = 40;
-	const float PADDLE_OFFSET = 20; // Paddle distance from side of screen
-	const float PADDLE_SPEED = 0.1;
+	const float PADDLE_OFFSET_L = 20; // Left paddle distance from side of screen - serves as base distance
+	const float PADDLE_OFFSET_R = WINDOW_WIDTH - PADDLE_OFFSET_L - PADDLE_THICKNESS;
+	const float PADDLE_MAX_Y = WINDOW_HEIGHT - WALL_THICKNESS - PADDLE_LENGTH;
 
+
+	// Window setup
 	sf::RenderWindow window( sf::VideoMode( { WINDOW_WIDTH, WINDOW_HEIGHT } ), "Pong" );
 
 	// Walls
@@ -24,11 +34,11 @@ int main()
 
 	// Left paddle
 	sf::RectangleShape left_paddle({PADDLE_THICKNESS, PADDLE_LENGTH});
-	left_paddle.setPosition({PADDLE_OFFSET, WINDOW_WIDTH/2 - PADDLE_LENGTH/2});
+	left_paddle.setPosition({PADDLE_OFFSET_L, WINDOW_WIDTH/2 - PADDLE_LENGTH/2});
 
 	// Right paddle
 	sf::RectangleShape right_paddle({PADDLE_THICKNESS, PADDLE_LENGTH});
-	right_paddle.setPosition({WINDOW_WIDTH - PADDLE_OFFSET - PADDLE_THICKNESS, WINDOW_WIDTH/2 - PADDLE_LENGTH/2});
+	right_paddle.setPosition({PADDLE_OFFSET_R, WINDOW_WIDTH/2 - PADDLE_LENGTH/2});
 
 	while ( window.isOpen() )
 	{
@@ -43,23 +53,31 @@ int main()
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Q)){ // Left paddle up - Q
 			left_paddle.move({0.0f, -PADDLE_SPEED});
 			// Clamp upper y-pos
-			if(left_paddle.getPosition().y <= WALL_THICKNESS) left_paddle.setPosition({PADDLE_OFFSET, WALL_THICKNESS}); 
+			if(left_paddle.getPosition().y <= WALL_THICKNESS){
+				left_paddle.setPosition({PADDLE_OFFSET_L, WALL_THICKNESS});
+			}
 		}
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::A)){ // Left paddle down - A
 			left_paddle.move({0.0f, PADDLE_SPEED});
 			// Clamp lower y-pos
-			if(left_paddle.getPosition().y >= WINDOW_HEIGHT-PADDLE_LENGTH-WALL_THICKNESS) left_paddle.setPosition({PADDLE_OFFSET, WINDOW_HEIGHT-PADDLE_LENGTH-WALL_THICKNESS}); // TODO: shorten this oml
+			if(left_paddle.getPosition().y >= PADDLE_MAX_Y){
+				left_paddle.setPosition({PADDLE_OFFSET_L, PADDLE_MAX_Y});
+			}
 		}
 
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::P)){ // Right paddle up - P
 			right_paddle.move({0.0f, -PADDLE_SPEED});
 			// Clamp upper y-pos
-			if(right_paddle.getPosition().y <= WALL_THICKNESS) right_paddle.setPosition({WINDOW_WIDTH - PADDLE_OFFSET - PADDLE_THICKNESS, WALL_THICKNESS}); 
+			if(right_paddle.getPosition().y <= WALL_THICKNESS){
+				right_paddle.setPosition({PADDLE_OFFSET_R, WALL_THICKNESS});
+			}
 		}
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::L)){ // Right paddle down - L
 			right_paddle.move({0.0f, PADDLE_SPEED});
 			// Clamp lower y-pos
-			if(right_paddle.getPosition().y >= WINDOW_HEIGHT-PADDLE_LENGTH-WALL_THICKNESS) right_paddle.setPosition({WINDOW_WIDTH - PADDLE_OFFSET - PADDLE_THICKNESS, WINDOW_HEIGHT-PADDLE_LENGTH-WALL_THICKNESS}); // TODO: shorten this oml
+			if(right_paddle.getPosition().y >= PADDLE_MAX_Y){
+				right_paddle.setPosition({PADDLE_OFFSET_R, PADDLE_MAX_Y});
+			}
 		}
 
 		window.clear();
