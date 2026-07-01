@@ -4,7 +4,7 @@ This is a recreation of the classic arcade game Pong with SFML/C++, created as m
 
 # Goals
 ## Basic goals
-- [x] Arena with 2 walls + divider
+- [x] Arena with 2 walls + divider (01/07/26)
 - [ ] User-controllable paddles
 - [ ] Ball that moves around play field + bounces off paddles/walls
 - [ ] Detect when ball leaves play field
