@@ -23,7 +23,7 @@ int main()
 		// Handle window close
 		while ( const std::optional event = window.pollEvent() )
 		{
-			if ( event->is<sf::Event::Closed>() )
+			if ( event->is<sf::Event::Closed>() || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape) ) // TODO: switch Escape key exit to an event?
 				window.close();
 		}
 
